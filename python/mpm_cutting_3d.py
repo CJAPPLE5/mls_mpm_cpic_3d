@@ -1,10 +1,6 @@
-from matplotlib.pyplot import grid, new_figure_manager
-from pkg_resources import parse_version
 import taichi as ti
 import numpy as np
 import os
-import sys
-import math
 
 export_ply = False
 export_video = False
@@ -27,10 +23,14 @@ if export_ply:
 if export_ply:
     export_file = "tmp/ply{}/cut.ply".format(dir_num)
 
+# obj文件路径
 obj_file = "./python/ring1.obj"
+# 圆环半径0.1，初始圆心位置[0.7, 0.5, 0.5]
+# 方块范围[0.3-0.7, 0.0-0.4, 0-0.4]
+# move为圆环平移量，[0.0,0.0,0.2]表示移到方块角上
 move = [0.0, 0.0, 0.2]
 
-
+# 读取obj
 def read_obj(path):
     f = open(path)
 
@@ -112,6 +112,7 @@ energy = ti.field(dtype=float, shape=())
 x_dir = ti.Vector.field(3, dtype=float, shape=())
 center = ti.Vector.field(3, dtype=float, shape=())
 
+# 圆环半径，粒子数
 ring_radius = 0.1
 n_rseg = 100
 r_circle = 0.1*w
@@ -147,6 +148,7 @@ def getnormal_i(i):
     vec_p_cen *= 0.1
     p_ring = center[None]+vec_p_cen
     normal = (x_rp[i] - p_ring).normalized()
+    
     normal[1] = normal[1] / 20
     normal = normal.normalized()
     # if x_rp[i][0]**2 + x_rp[i][2]**2 < ring_radius**2:
@@ -494,12 +496,9 @@ while window.running:
             G2P()
             pass
     # ti.print_kernel_profile_info('count')
-    # pos = x.to_numpy()
     render()
     window.show()
     pos = x.to_numpy()
-    # rp = x_rp.to_numpy()
-    # pos = np.concatenate((pos,rp),axis=0)
     if export_video:
         video_manager.write_frame(pos)
 
