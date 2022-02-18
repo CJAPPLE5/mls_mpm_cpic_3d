@@ -90,7 +90,7 @@ c=1
 dim = 3
 quality = 1
 bound = 3
-n_grid = 32
+n_grid = 64
 n_particles = n_grid**dim // 2**(dim - 1)
 dx, inv_dx = w / n_grid, float(n_grid) / w
 dt = 1e-4 / quality
@@ -148,7 +148,7 @@ def getnormal_i(i):
     vec_p_cen *= 0.1
     p_ring = center[None]+vec_p_cen
     normal = (x_rp[i] - p_ring).normalized()
-    
+
     normal[1] = normal[1] / 20
     normal = normal.normalized()
     # if x_rp[i][0]**2 + x_rp[i][2]**2 < ring_radius**2:
